@@ -1,0 +1,80 @@
+* {
+  color: #44b26f;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 170px auto 0;
+  background: #f5f5f5;
+  padding: 75px 110px 210px;
+  max-width: 550px;
+
+  .formik {
+    color: #44b26f;
+    position: relative;
+    width: 100%;
+
+    #userName {
+      margin-top: 90px;
+      width: 100%;
+    }
+
+    #password,
+    #logInButton {
+      margin-top: 50px;
+      width: 100%;
+    }
+
+    #logInButton button {
+      width: 100%;
+      height: 56px;
+      border: 0;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 29px;
+      color: #ffffff;
+      font-family: "Roboto", sans-serif;
+      background: #44b26f;
+      cursor: pointer;
+    }
+
+    .fieldContainer {
+      position: relative;
+
+      .inpUser,
+      .passWord {
+        padding-left: 20px;
+        width: 100%;
+      }
+
+      input {
+        max-width: 100%;
+        min-height: 56px;
+        height: 100%;
+        width: 100%;
+      }
+
+      input::placeholder {
+        padding-left: 19px;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        color: #44b26f;
+      }
+
+      input:focus {
+        border-color: #44b26f;
+      }
+
+      .eyeImg {
+        cursor: pointer;
+        position: absolute;
+        top: 68px;
+        right: 17px;
+      }
+    }
+  }
+}
