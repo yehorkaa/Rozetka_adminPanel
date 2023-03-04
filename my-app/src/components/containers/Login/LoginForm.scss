@@ -1,15 +1,19 @@
 * {
   color: #44b26f;
 }
-
-.form {
+.formBack {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  margin: 170px auto 0;
+  align-items:center;
+  background:#44b26f;
+  height: 100vh;
+}
+.form {
+
+ width: 500px;
   background: #f5f5f5;
-  padding: 75px 110px 210px;
+  padding: 75px 110px 210px 110px;
   max-width: 550px;
 
   .formik {

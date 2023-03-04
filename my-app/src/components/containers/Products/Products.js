@@ -101,7 +101,7 @@ const Products = () => {
 
   return (
     <>
-      {isOpen ? (
+    <div className="ProductTools">    {isOpen ? (
         <NewInfoForm
           addProduct={addProduct}
           editProduct={editProduct}
@@ -131,7 +131,8 @@ const Products = () => {
             removeElement={removeElement}
           />
         ) : null}
-      </div>
+      </div></div>
+  
     </>
   );
 };
