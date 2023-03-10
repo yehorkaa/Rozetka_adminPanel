@@ -1,0 +1,97 @@
+* {
+  color: #44b26f;
+}
+.error-message {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.formBack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  background:#44b26f;
+  height: 100vh;
+}
+.form {
+height: 700px;
+max-width: 500px;
+width: 100%;
+  background: #f5f5f5;
+  padding: 75px 110px 210px 110px;
+  max-width: 550px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  .formik {
+    color: #44b26f;
+    position: relative;
+    width: 100%;
+
+    #userName {
+      margin-top: 90px;
+      width: 100%;
+    }
+
+    #password,
+    #logInButton {
+      margin-top: 50px;
+      width: 100%;
+    }
+
+    #logInButton {
+      width: 100%;
+      height: 56px;
+      border: 0;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 29px;
+      color: #ffffff;
+      font-family: "Roboto", sans-serif;
+      background: #44b26f;
+      cursor: pointer;
+    }
+
+    .fieldContainer {
+      position: relative;
+
+      .inpUser,
+      .passWord {
+        padding-left: 20px;
+        width: 100%;
+      }
+
+    
+      input {
+        width: 100%;
+        min-height: 50px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #555;
+        transition: border-color 0.2s ease-out;
+      }
+
+      input::placeholder {
+        color: #888;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #44b26f;
+      }
+
+
+      .eyeImg {
+        cursor: pointer;
+        position: absolute;
+        top: 65px;
+        right: 17px;
+      }
+    }
+  }
+}
