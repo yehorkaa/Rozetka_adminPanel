@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginForm.scss";
 import myImage from "../../assets/2298622371.svg";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -13,7 +14,9 @@ const LoginForm = () => {
   const togglePlaceholder = () => {
     setShowPlaceholder(!showPlaceholder);
   };
-
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -27,17 +30,22 @@ const LoginForm = () => {
       }
     };
     fetchUsers();
+
+    if ((location.pathname = "/")) {
+      localStorage.removeItem("token");
+    }
   }, []);
 
   const handleSubmit = (values) => {
     const matchingUser = user.find(
       (u) => u.name === values.userName && u.password === values.password
     );
-  
-    if (matchingUser) {
-      window.location.href = "/products";
 
+    if (matchingUser) {
+      navigate("/products", { replace: true });
+      localStorage.setItem("token", +new Date());
     }
+
     setError(true);
   };
 
