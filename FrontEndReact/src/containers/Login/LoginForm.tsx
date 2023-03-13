@@ -1,54 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./LoginForm.scss";
 import myImage from "../../assets/2298622371.svg";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+interface User {
+  name: string;
+  password: string;
+}
 
-const LoginForm = () => {
-  const [showPlaceholder, setShowPlaceholder] = useState(true);
-  const [user, setUsers] = useState([]);
-  const [error, setError] = useState(false);
+const LoginForm: React.FC = () => {
+  const [showPlaceholder, setShowPlaceholder] = useState<boolean>(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState<boolean>(false);
+
   const togglePlaceholder = () => {
     setShowPlaceholder(!showPlaceholder);
   };
   const navigate = useNavigate();
-  const location = useLocation();
-  console.log(location);
+  // const location = useLocation();
+  // console.log(location);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
           "https://63c169e471656267187a85ea.mockapi.io/users"
         );
-        const users = await response.json();
-        setUsers(users);
+        const fetchedUsers = await response.json();
+        setUsers(fetchedUsers);
       } catch (error) {
         console.error(error);
       }
     };
     fetchUsers();
-
-    if ((location.pathname = "/")) {
-      localStorage.removeItem("token");
-    }
   }, []);
 
-  const handleSubmit = (values) => {
-    const matchingUser = user.find(
-      (u) => u.name === values.userName && u.password === values.password
+  const handleSubmit = (values: { userName: string; password: string }) => {
+    
+    const matchingUser = users.find(
+      (user) => user.name === values.userName && user.password === values.password
     );
-
     if (matchingUser) {
       navigate("/products", { replace: true });
-      localStorage.setItem("token", +new Date());
+      localStorage.setItem("token", '123456');
+    } else {
+      setError(true);
     }
-
-    setError(true);
   };
-
   return (
     <div className="formBack">
       <div className="form">
@@ -87,16 +87,21 @@ const LoginForm = () => {
                 placeholder="Password"
                 className="passWord"
               />
+
               <div className="eyeImg">
                 {showPlaceholder ? (
-                  <VisibilityIcon alt="Show/hide" onClick={togglePlaceholder} />
+                  <VisibilityIcon
+                    component="svg"
+                    onClick={togglePlaceholder}
+                  />
                 ) : (
                   <VisibilityOffIcon
-                    alt="Show/hide"
+                    component="svg"
                     onClick={togglePlaceholder}
                   />
                 )}
               </div>
+
               <ErrorMessage className="error" name="password" component="div" />
             </div>
             <button className="logInButton" id="logInButton" type="submit">

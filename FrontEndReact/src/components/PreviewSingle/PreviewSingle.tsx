@@ -1,4 +1,3 @@
-import React from "react";
 import logo from "../../assets/2298622371.svg";
 import backArrow from "../../assets/backArrow.png";
 import laptop from "../../assets/lenovo.png";
@@ -7,21 +6,28 @@ import { Link, useParams } from "react-router-dom";
 import "./PreviewSingle.scss";
 import { useEffect, useState } from "react";
 
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  Quantity: number;
+  description: string;
+};
+
 const PreviewSingle = () => {
-  const [dataProduct, setDataProduct] = useState([]);
-  const { id } = useParams();
+  const [dataProduct, setDataProduct] = useState<Product | null>(null);
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     fetch(`https://63c169e471656267187a85ea.mockapi.io/productsTable/${id}`)
       .then((res) => res.json())
-      .then((res) => setDataProduct([res]));
+      .then((res: Product) => setDataProduct(res))
+      .catch((error) => console.log(error));
   }, [id]);
 
-  if (dataProduct.length === 0) {
-    return <div className="Loading">Loading...</div>;
-  }
+  if (!dataProduct) return <div>Loading...</div>;
 
-  const element = dataProduct[0];
+  const { name, price, Quantity, description } = dataProduct;
 
   return (
     <div className="SinglePreviewPage">
@@ -37,7 +43,7 @@ const PreviewSingle = () => {
           </div>
         </Link>
 
-        <div className="SingleName">{element.name}</div>
+        <div className="SingleName">{name}</div>
       </div>
       <div className="laptopAndDescription">
         <div className="laptopImg">
@@ -54,19 +60,17 @@ const PreviewSingle = () => {
             </div>
           </div>
           <div className="productCOst">
-            <span>{element.price}$</span>
+            <span>{price}$</span>
           </div>
           <div className="productQuantity">
-            <span>{"Quantity: " + element.Quantity}</span>
+            <span>{"Quantity: " + Quantity}</span>
           </div>
         </div>
       </div>
       <div className="bigDescriptionOfPr">
-        <span>Description {element.name} </span>
+        <span>Description {name} </span>
         <p>
-          {element.description.length > 0
-            ? element.description
-            : "There is no description..."}
+          {description.length > 0 ? description : "There is no description..."}
         </p>
       </div>
     </div>
@@ -74,3 +78,4 @@ const PreviewSingle = () => {
 };
 
 export default PreviewSingle;
+

@@ -1,31 +1,34 @@
-import React, { useContext, useEffect, useState } from "react";
-import LoginForm from "../containers/Login/LoginForm";
+import React from "react";
+import LoginForm from "../containers/Login/LoginForm"
 import Products from "../containers/Products/Products";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
   useNavigate,
 } from "react-router-dom";
 import Preview from "../containers/Preview/Preview";
 import PreviewSingle from "../components/PreviewSingle/PreviewSingle";
 import "./App.scss";
-import { Suspense } from "react";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+interface ProtectedRouteProps {
+  component: React.ComponentType<any>;
+  path: string;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component, path }):any => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("token");
   return isAuthenticated ? (
     <Routes>
-      <Route {...rest} element={<Component />} />
+      <Route path={path} element={<Component />} />
     </Routes>
   ) : (
-    navigate("/", { replace: true })
+    navigate ("/" , {replace: true})
   );
 };
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <Router>
       <React.Fragment>
@@ -34,7 +37,7 @@ const App = () => {
         <ProtectedRoute path="/preview/:id" component={PreviewSingle} />
       </React.Fragment>
       <Routes>
-        <Route path="/" element={<LoginForm className="login" />} />
+        <Route path="/" element={<LoginForm  />} />
       </Routes>
     </Router>
   );

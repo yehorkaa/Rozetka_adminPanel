@@ -6,15 +6,22 @@ import "./Preview.scss";
 import { Link } from "react-router-dom";
 import backArrow from "../../assets/backArrow.png";
 import Spinner from "../../spinner/Spinner"
-const Preview = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+interface Product {
+  name: string;
+  price: number;
+  Quantity: number;
+  id: string;
+  }
+const Preview: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLoading(true);
     fetch(`https://63c169e471656267187a85ea.mockapi.io/productsTable`)
       .then((res) => res.json())
-      .then((res) => {
+      .then((res: Product[]) => {
         setProducts(res);
         setIsLoading(false);
       })
@@ -46,7 +53,7 @@ const Preview = () => {
   return (
     <>
       {isLoading ? (
-        <Spinner className="spinner" />
+        <Spinner/>
       ) : (
         <div className="logo_and_cards">
           <div className="logo">

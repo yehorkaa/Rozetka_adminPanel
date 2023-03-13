@@ -1,14 +1,25 @@
-
+import React from "react";
 import Table from "react-bootstrap/Table";
 import arrow from "../../assets/arrow.svg";
-
 import pen from "../../assets/pen.svg";
 import box from "../../assets/box.svg"
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid'
 import "./Table.scss";
 
+interface Props {
+  products: {
+    Category: string;
+    name: string;
+    Quantity: number;
+    price: string | number;
+    id: number ;
+  }[];
+  ToggleDeleteProduct: (e: React.MouseEvent<HTMLImageElement>, id: number) => void;
+  ToggleEditProduct: (id: number) => void;
+}
 
-const TableData = ({products, ToggleDeleteProduct, ToggleEditProduct}) => {
+
+const TableData:React.FC<Props> = ({products, ToggleDeleteProduct, ToggleEditProduct}) => {
   const element = products.map(({ Category, name, Quantity, price, id }) => (
     <tbody style={{ background: "#D9D9D9" }} key={uuid()}>
       <tr>
@@ -23,7 +34,7 @@ const TableData = ({products, ToggleDeleteProduct, ToggleEditProduct}) => {
             src={box}
             alt="del"
             className="delete"
-            onClick={(event) => ToggleDeleteProduct(event,id)}
+            onClick={(e) => ToggleDeleteProduct(e, id)}
           />
         </td>
       </tr>
@@ -56,9 +67,9 @@ const TableData = ({products, ToggleDeleteProduct, ToggleEditProduct}) => {
           {element}
         </Table>
       </div>
-   
     </>
   );
 };
 
 export default TableData;
+
