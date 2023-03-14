@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import NewInfoForm from "../../components/NewInfoForm/FormTable";
 import DeleteForm from "../../components/DeleteForm/DeleteForm";
 import TableData from "../../components/Table/Table";
-
 import Header from "../../components/Header/Header";
 import "./Products.scss";
 
@@ -16,13 +15,13 @@ interface ProductObject {
 
 interface ProductFormData extends ProductObject {
   description: string;
-};
+}
 
 const Products: React.FC = () => {
   const [editId, setEditId] = useState<number | null>(null);
   const [products, setProducts] = useState<ProductObject[]>([]);
   const [edited, setEdited] = useState<any>({});
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [showDelete, setDelete] = useState<boolean>(false);
@@ -32,18 +31,21 @@ const Products: React.FC = () => {
 
   const request = `https://63c169e471656267187a85ea.mockapi.io/productsTable `;
   useEffect(() => {
+    setLoading(true);
     fetch(request)
       .then((res) => res.json())
-      .then((res) => setProducts(res));
+      .then((res) => setProducts(res))
+      .then(() => setLoading(false));
   }, [request]);
 
   const removeElement = async () => {
+    setLoading(true);
     const response = await fetch(
       `https://63c169e471656267187a85ea.mockapi.io/productsTable/${deleteId}`,
       { method: "DELETE" }
     );
-    const res = await response.json();
-    console.log(res);
+    await response.json();
+    await setLoading(false);
     setDelete(!showDelete);
     setProducts(products.filter((element: any) => element.id !== deleteId));
   };
@@ -52,14 +54,15 @@ const Products: React.FC = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    console.log("I am add");
     setShowAdd(!showAdd);
-    setIsEditing(isEditing);
+    setIsEditing(false);
   };
 
-  const ToggleDeleteProduct = (e: React.MouseEvent<HTMLButtonElement | HTMLImageElement>, id: number | null) => {
+  const ToggleDeleteProduct = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLImageElement>,
+    id: number | null
+  ) => {
     console.log(e);
-    console.log("I am delete");
     setDeleteId(id);
     setDelete(!showDelete);
   };
@@ -67,7 +70,9 @@ const Products: React.FC = () => {
   const ToggleEditProduct = (id: null | number) => {
     setEditId(id);
     setEdited(
-      products.find((product: ProductObject) => product.id === id) as ProductObject
+      products.find(
+        (product: ProductObject) => product.id === id
+      ) as ProductObject
     );
     setIsEditing(true);
   };
@@ -80,6 +85,7 @@ const Products: React.FC = () => {
 
   const addProduct = async (product: ProductFormData) => {
     setIsEditing(!isEditing);
+    setLoading(true);
     try {
       const response = await fetch(request, {
         method: "POST",
@@ -90,6 +96,7 @@ const Products: React.FC = () => {
       });
       const data = await response.json();
       setProducts([...products, data]);
+      await setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -119,25 +126,22 @@ const Products: React.FC = () => {
   };
   return (
     <>
-      <div className="ProductTools" onClick={handleBackgroundClick}>
+      <div className="ProductTools" onClick={(e) => handleBackgroundClick(e)}>
         {" "}
-        <div 
-        >
-          <Header ToggleAddProduct={ToggleAddProduct} />
-
-          <TableData
-            products={products}
+        <Header ToggleAddProduct={ToggleAddProduct} />
+        <TableData
+          loading={loading}
+          products={products}
+          ToggleDeleteProduct={ToggleDeleteProduct}
+          ToggleEditProduct={ToggleEditProduct}
+        />
+        {showDelete ? (
+          <DeleteForm
             ToggleDeleteProduct={ToggleDeleteProduct}
-            ToggleEditProduct={ToggleEditProduct}
+            removeElement={removeElement}
+            loading={loading}
           />
-
-          {showDelete ? (
-            <DeleteForm
-              ToggleDeleteProduct={ToggleDeleteProduct}
-              removeElement={removeElement}
-            />
-          ) : null}
-        </div>
+        ) : null}
         {isOpen ? (
           <NewInfoForm
             addProduct={addProduct}
@@ -145,6 +149,7 @@ const Products: React.FC = () => {
             handleClose={handleClose}
             edited={edited}
             isEditing={isEditing}
+            loading={loading}
           />
         ) : null}
       </div>

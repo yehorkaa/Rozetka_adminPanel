@@ -141,6 +141,7 @@ import React, { useState} from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import "./FormTable.scss";
+import Spinner from "spinner/Spinner";
 
 interface FormData {
   id: number;
@@ -158,6 +159,7 @@ type Props = {
   edited: FormData;
   editProduct: (formData: FormData, id: number) => void;
   isEditing: boolean;
+  loading: boolean;
 };
 
 const NewInfoForm: React.FC<Props> = ({
@@ -166,6 +168,7 @@ const NewInfoForm: React.FC<Props> = ({
   edited,
   editProduct,
   isEditing,
+  loading
 }) => {
   console.log(edited);
   const [formData, setFormData] = useState<FormData>({
@@ -192,26 +195,22 @@ const NewInfoForm: React.FC<Props> = ({
     description: "",
   };
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     if (isEditing) {
       editProduct(formData, edited.id);
+
     } else {
       addProduct(formData);
     }
     handleClose();
   };
+  
 
-  console.log(formData);
-  // const ReloadByForce = () => {
-  //   console.log('reload!')
-  //   window.location.reload()
-  // }
   const formTitle = isEditing ? "Edit Product" : "Add Product";
   return (
     <>
-      <div className="form-table-container">
-        <Formik initialValues={initialValues}  onSubmit={(event) => handleSubmit(event)}>
+    {loading ? <Spinner/> : <div className="form-table-container">
+        <Formik initialValues={initialValues}  onSubmit={handleSubmit}>
           <Form id="Form">
             <div className="Action">
               <h2>{formTitle}</h2>
@@ -274,7 +273,8 @@ const NewInfoForm: React.FC<Props> = ({
             </div>
           </Form>
         </Formik>
-      </div>
+      </div> }
+      
     </>
   );
 };
