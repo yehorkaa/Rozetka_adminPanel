@@ -192,26 +192,29 @@ const NewInfoForm: React.FC<Props> = ({
     description: "",
   };
 
-  const doThis = () => {
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
     if (isEditing) {
       editProduct(formData, edited.id);
     } else {
       addProduct(formData);
     }
+    handleClose();
   };
+
   console.log(formData);
   // const ReloadByForce = () => {
   //   console.log('reload!')
   //   window.location.reload()
   // }
-
+  const formTitle = isEditing ? "Edit Product" : "Add Product";
   return (
     <>
       <div className="form-table-container">
-        <Formik initialValues={initialValues}  onSubmit={() => doThis()}>
+        <Formik initialValues={initialValues}  onSubmit={(event) => handleSubmit(event)}>
           <Form id="Form">
             <div className="Action">
-              <h2>{isEditing ? "Edit product" : "Add product"}</h2>
+              <h2>{formTitle}</h2>
               <div className="closeImg" onClick={handleClose}>
                 <ClearIcon />
               </div>

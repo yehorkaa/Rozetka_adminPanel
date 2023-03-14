@@ -79,6 +79,7 @@ const Products: React.FC = () => {
   };
 
   const addProduct = async (product: ProductFormData) => {
+    setIsEditing(!isEditing);
     try {
       const response = await fetch(request, {
         method: "POST",
@@ -111,17 +112,16 @@ const Products: React.FC = () => {
       )
     );
   };
-
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
   return (
     <>
-      <div className="ProductTools">
+      <div className="ProductTools" onClick={handleBackgroundClick}>
         {" "}
-        <div
-          style={{
-            // zIndex: isOpen ? "-2" : 1,
-            // position: isOpen ? "relative" : "initial",
-            // opacity: isOpen ? 0 : 1,
-          }}
+        <div 
         >
           <Header ToggleAddProduct={ToggleAddProduct} />
 
@@ -137,7 +137,8 @@ const Products: React.FC = () => {
               removeElement={removeElement}
             />
           ) : null}
-               {isOpen ? (
+        </div>
+        {isOpen ? (
           <NewInfoForm
             addProduct={addProduct}
             editProduct={editProduct}
@@ -146,7 +147,6 @@ const Products: React.FC = () => {
             isEditing={isEditing}
           />
         ) : null}
-        </div>
       </div>
     </>
   );

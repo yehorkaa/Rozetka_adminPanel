@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginForm.scss";
 import myImage from "../../assets/2298622371.svg";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -20,8 +20,8 @@ const LoginForm: React.FC = () => {
     setShowPlaceholder(!showPlaceholder);
   };
   const navigate = useNavigate();
-  // const location = useLocation();
-  // console.log(location);
+  const location = useLocation();
+  console.log(location);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -35,7 +35,11 @@ const LoginForm: React.FC = () => {
       }
     };
     fetchUsers();
-  }, []);
+
+    if (location.pathname === "/login") {
+      localStorage.removeItem("token");
+    }
+  }, [location]);
 
   const handleSubmit = (values: { userName: string; password: string }) => {
     
@@ -44,7 +48,7 @@ const LoginForm: React.FC = () => {
     );
     if (matchingUser) {
       navigate("/products", { replace: true });
-      localStorage.setItem("token", '123456');
+      localStorage.setItem("token", String(+new Date()));
     } else {
       setError(true);
     }
