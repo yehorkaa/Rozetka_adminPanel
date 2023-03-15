@@ -1,16 +1,16 @@
-import React from "react"
-
+import React from "react";
+import './ErrorPage.scss'
 const ErrorPage: React.FC = () => {
-    return (
-        <div className="error404">
-            <div className="name404">
-            404
-            </div>
-            <div className="description">
-                Page is not found
-                </div>404
-        </div>
-    )
-}
+  return (
+    <div className="error404">
+      <div className="name404">
+        <span>404</span>
+      </div>
+      <div className="description">
+        <span> Page is not found</span>
+      </div>
+    </div>
+  );
+};
 
-export default ErrorPage
+export default ErrorPage;
