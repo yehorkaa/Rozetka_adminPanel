@@ -4,6 +4,7 @@ import laptop from "../../assets/lenovo.png";
 import accept from "../../assets/accept.svg";
 import { Link, useParams } from "react-router-dom";
 import "./PreviewSingle.scss";
+import Spinner from "spinner/Spinner";
 import { useEffect, useState } from "react";
 
 type Product = {
@@ -16,14 +17,18 @@ type Product = {
 
 const PreviewSingle = () => {
   const [dataProduct, setDataProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
+    setLoading(true);
     fetch(`https://63c169e471656267187a85ea.mockapi.io/productsTable/${id}`)
       .then((res) => res.json())
       .then((res: Product) => setDataProduct(res))
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
   }, [id]);
+  
 
   if (!dataProduct) return <div>Loading...</div>;
 
@@ -45,37 +50,44 @@ const PreviewSingle = () => {
 
         <div className="SingleName">{name}</div>
       </div>
-      <div className="laptopAndDescription">
-        <div className="laptopImg">
-          <img src={laptop} alt="Product" />
-        </div>
-        <div className="allRightDescription">
-          <div className="acceptAndName">
-            <div className="acceptImg">
-              <img src={accept} alt="Commodity" />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <div className="laptopAndDescription">
+            <div className="laptopImg">
+              <img src={laptop} alt="Product" />
             </div>
+            <div className="allRightDescription">
+              <div className="acceptAndName">
+                <div className="acceptImg">
+                  <img src={accept} alt="Commodity" />
+                </div>
 
-            <div className="acceptName">
-              <span>The product is ready for you!</span>
+                <div className="acceptName">
+                  <span>The product is ready for you!</span>
+                </div>
+              </div>
+              <div className="productCOst">
+                <span>{price}$</span>
+              </div>
+              <div className="productQuantity">
+                <span>{"Quantity: " + Quantity}</span>
+              </div>
             </div>
           </div>
-          <div className="productCOst">
-            <span>{price}$</span>
+          <div className="bigDescriptionOfPr">
+            <span>Description {name} </span>
+            <p>
+              {description.length > 0
+                ? description
+                : "There is no description..."}
+            </p>
           </div>
-          <div className="productQuantity">
-            <span>{"Quantity: " + Quantity}</span>
-          </div>
-        </div>
-      </div>
-      <div className="bigDescriptionOfPr">
-        <span>Description {name} </span>
-        <p>
-          {description.length > 0 ? description : "There is no description..."}
-        </p>
-      </div>
+        </>
+      )}
     </div>
   );
 };
 
 export default PreviewSingle;
-

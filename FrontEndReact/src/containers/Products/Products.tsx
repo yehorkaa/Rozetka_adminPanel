@@ -29,25 +29,37 @@ const Products: React.FC = () => {
 
   const isOpen = editId || showAdd;
 
-  const request = `https://63c169e471656267187a85ea.mockapi.io/productsTable `;
+  const request = `https://63c169e471656267187a85ea.mockapi.io/productsTable`;
   useEffect(() => {
-    setLoading(true);
-    fetch(request)
-      .then((res) => res.json())
-      .then((res) => setProducts(res))
-      .then(() => setLoading(false));
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(request);
+        const productsFetch = await response.json();
+        setProducts(productsFetch);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [request]);
 
   const removeElement = async () => {
     setLoading(true);
-    const response = await fetch(
-      `https://63c169e471656267187a85ea.mockapi.io/productsTable/${deleteId}`,
-      { method: "DELETE" }
-    );
-    await response.json();
-    await setLoading(false);
-    setDelete(!showDelete);
-    setProducts(products.filter((element: any) => element.id !== deleteId));
+    try {
+      const response = await fetch(
+        `${request}/${deleteId}`,
+        { method: "DELETE" }
+      );
+      await response.json();
+      setLoading(false);
+      setDelete(!showDelete);
+      setProducts(products.filter((element: any) => element.id !== deleteId));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const ToggleAddProduct = (
@@ -96,7 +108,7 @@ const Products: React.FC = () => {
       });
       const data = await response.json();
       setProducts([...products, data]);
-      await setLoading(false);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -106,7 +118,7 @@ const Products: React.FC = () => {
     object: ProductObject,
     id: number
   ): Promise<void> => {
-    fetch(`https://63c169e471656267187a85ea.mockapi.io/productsTable/${id}`, {
+    fetch(`${request}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
