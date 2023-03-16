@@ -21,7 +21,7 @@ const LoginForm: React.FC = () => {
   };
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {

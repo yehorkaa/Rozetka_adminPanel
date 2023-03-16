@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import NewInfoForm from "../../components/NewInfoForm/FormTable";
 import DeleteForm from "../../components/DeleteForm/DeleteForm";
 import TableData from "../../components/Table/Table";
@@ -46,13 +46,10 @@ const Products: React.FC = () => {
     fetchData();
   }, [request]);
 
-  const removeElement = async () => {
+  const removeElement = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${request}/${deleteId}`,
-        { method: "DELETE" }
-      );
+      const response = await fetch(`${request}/${deleteId}`, { method: "DELETE" });
       await response.json();
       setLoading(false);
       setDelete(!showDelete);
@@ -60,34 +57,39 @@ const Products: React.FC = () => {
     } catch (e) {
       console.log(e);
     }
-  };
+  }, [deleteId, products, request, showDelete]);
 
-  const ToggleAddProduct = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    setShowAdd(!showAdd);
-    setIsEditing(false);
-  };
+  const ToggleAddProduct = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      setShowAdd(!showAdd);
+      setIsEditing(false);
+    },
+    [showAdd]
+  );
+  
+  
+  const ToggleDeleteProduct = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement | HTMLImageElement>, id: number | null) => {
+      console.log(e);
+      setDeleteId(id);
+      setDelete(!showDelete);
+    },
+    [showDelete]
+  );
 
-  const ToggleDeleteProduct = (
-    e: React.MouseEvent<HTMLButtonElement | HTMLImageElement>,
-    id: number | null
-  ) => {
-    console.log(e);
-    setDeleteId(id);
-    setDelete(!showDelete);
-  };
-
-  const ToggleEditProduct = (id: null | number) => {
-    setEditId(id);
-    setEdited(
-      products.find(
-        (product: ProductObject) => product.id === id
-      ) as ProductObject
-    );
-    setIsEditing(true);
-  };
+  const ToggleEditProduct = useCallback(
+    (id: null | number) => {
+      setEditId(id);
+      setEdited(
+        products.find(
+          (product: ProductObject) =>
+            product.id === id
+        )
+      );
+    },
+    [products]
+  );
 
   const handleClose = () => {
     setShowAdd(false);
