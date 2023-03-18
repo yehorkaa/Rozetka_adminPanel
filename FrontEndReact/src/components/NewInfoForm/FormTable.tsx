@@ -68,8 +68,9 @@ const NewInfoForm: React.FC<Props> = ({
     handleClose();
   };
   
-
+  console.log(isEditing)
   const formTitle = isEditing ? "Edit Product" : "Add Product";
+
   return (
     <>
     {loading ? <Spinner/> : <div className="form-table-container">

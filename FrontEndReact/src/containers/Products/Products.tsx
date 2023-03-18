@@ -46,7 +46,7 @@ const Products: React.FC = () => {
     fetchData();
   }, [request]);
 
-  const removeElement = useCallback(async () => {
+  const removeElement =  async () => {
     setLoading(true);
     try {
       const response = await fetch(`${request}/${deleteId}`, { method: "DELETE" });
@@ -57,7 +57,7 @@ const Products: React.FC = () => {
     } catch (e) {
       console.log(e);
     }
-  }, [deleteId, products, request, showDelete]);
+  };
 
   const ToggleAddProduct = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -79,7 +79,9 @@ const Products: React.FC = () => {
   );
 
   const ToggleEditProduct = useCallback(
+    
     (id: null | number) => {
+      setIsEditing(true);
       setEditId(id);
       setEdited(
         products.find(
@@ -116,23 +118,18 @@ const Products: React.FC = () => {
     }
   };
 
-  const editProduct = async (
-    object: ProductObject,
-    id: number
-  ): Promise<void> => {
-    fetch(`${request}/${id}`, {
+  const editProduct = async (object: ProductObject, id: number): Promise<void> => {
+    const response = await fetch(`${request}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(object),
+      body: JSON.stringify(object), // отправляем измененный объект
     });
-    setProducts(
-      products.map((product: ProductObject) =>
-        product.id === id ? { ...product, ...object } : product
-      )
-    );
+    const data = await response.json();
+    setProducts(products.map((product: ProductObject) => product.id === id ? { ...data } : product));
   };
+  
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       handleClose();
@@ -158,13 +155,14 @@ const Products: React.FC = () => {
         ) : null}
         {isOpen ? (
           <NewInfoForm
-            addProduct={addProduct}
-            editProduct={editProduct}
-            handleClose={handleClose}
-            edited={edited}
-            isEditing={isEditing}
-            loading={loading}
-          />
+          addProduct={addProduct}
+          editProduct={editProduct}
+          handleClose={handleClose}
+          isEditing={isEditing} 
+          edited={edited}
+          loading={loading}
+        />
+        
         ) : null}
       </div>
     </>
