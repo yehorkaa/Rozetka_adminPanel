@@ -1,0 +1,53 @@
+#Form {
+    width: 430px;
+ 
+    margin: 0 auto;
+  
+  .Action {
+    background: #ffffff;
+    padding: 7px 13px;
+    display: flex;
+    justify-content: space-between;
+    .closeImg {
+        cursor: pointer;
+    }
+    
+  }
+  input {
+    min-height: 31px;
+    padding: 7px 0px 7px 31px;
+    border: none;
+    outline: none;
+  }
+  #Description {
+    min-height: 110px;
+    padding-bottom: 40px;
+  }
+  #FormContainer {
+    max-width: 430px;
+    position: absolute;
+    padding: 30px 35px 10px 35px;
+    width: 100%;
+    background: #d9d9d9;
+    display: flex;
+    
+    gap: 40px;
+    flex-direction: column;
+
+    .SubmitORCancel {
+      
+      margin-left: auto;
+      .submitBtn {
+        margin-left: 30px;
+      }
+      button {
+        cursor: pointer;
+        border: none;
+        padding: 7px 30px;
+        color: #FFFFFF;
+        background: #44B26F;
+       
+      }
+    }
+  }
+}
