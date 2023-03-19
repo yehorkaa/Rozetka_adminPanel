@@ -8,7 +8,7 @@ import Spinner from "spinner/Spinner";
 import { useEffect, useState } from "react";
 
 type Product = {
-  id: string;
+  id?: string;
   name: string;
   price: number;
   Quantity: number;
@@ -17,19 +17,17 @@ type Product = {
 
 const PreviewSingle = () => {
   const [dataProduct, setDataProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     const previewSingleProduct = async () => {
       try {
-        setLoading(true);
         const res = await fetch(
           `https://63c169e471656267187a85ea.mockapi.io/productsTable/${id}`
         );
         const resJson: Product = await res.json();
         setDataProduct(resJson);
-        setLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -37,8 +35,9 @@ const PreviewSingle = () => {
     previewSingleProduct();
   }, [id]);
 
-  if (!dataProduct) return <div>Loading...</div>;
-
+  if (!dataProduct) {
+    return <Spinner />;
+  }
   const { name, price, Quantity, description } = dataProduct;
 
   return (
@@ -57,44 +56,43 @@ const PreviewSingle = () => {
 
         <div className="SingleName">{name}</div>
       </div>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <>
-          <div className="laptopAndDescription">
-            <div className="laptopImg">
-              <img src={laptop} alt="Product" />
-            </div>
-            <div className="allRightDescription">
-              <div className="acceptAndName">
-                <div className="acceptImg">
-                  <img src={accept} alt="Commodity" />
-                </div>
 
-                <div className="acceptName">
-                  <span>The product is ready for you!</span>
-                </div>
+      <>
+        <div className="laptopAndDescription">
+          <div className="laptopImg">
+            <img src={laptop} alt="Product" />
+          </div>
+          <div className="allRightDescription">
+            <div className="acceptAndName">
+              <div className="acceptImg">
+                <img src={accept} alt="Commodity" />
               </div>
-              <div className="productCOst">
-                <span>{price}$</span>
-              </div>
-              <div className="productQuantity">
-                <span>{"Quantity: " + Quantity}</span>
+
+              <div className="acceptName">
+                <span>The product is ready for you!</span>
               </div>
             </div>
+            <div className="productCOst">
+              <span>{price}$</span>
+            </div>
+            <div className="productQuantity">
+              <span>{"Quantity: " + Quantity}</span>
+            </div>
           </div>
-          <div className="bigDescriptionOfPr">
-            <span>Description {name} </span>
-            <p>
-              {description.length > 0
-                ? description
-                : "There is no description..."}
-            </p>
-          </div>
-        </>
-      )}
+        </div>
+        <div className="bigDescriptionOfPr">
+          <span>Description {name} </span>
+          <p>
+            {description.length > 0
+              ? description
+              : "There is no description..."}
+          </p>
+        </div>
+      </>
     </div>
   );
 };
 
 export default PreviewSingle;
+
+
