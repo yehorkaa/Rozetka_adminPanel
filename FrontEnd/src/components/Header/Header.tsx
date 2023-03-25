@@ -6,36 +6,42 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 interface HeaderProps {
-  ToggleAddProduct: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  ToggleAddProduct: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ToggleAddProduct}) => {
-  return (
-    <div className="container">
-      <div className="header">
-        <div className="logoAndButton">
-          <div className="logo">
-            <img src={logo} alt="Logo" />
-          </div>
-          <Link to="/preview" className="preview">
-            <Button variant="primary" size="lg" active className="preview_inside">
-              <img src={Man} alt="Man" />
-              <span>Preview</span>
-            </Button>{" "}
-          </Link>
+const Header: React.FC<HeaderProps> = ({ ToggleAddProduct }) => (
+  <div className="container">
+    <div className="header">
+      <div className="logoAndButton">
+        <div className="logo">
+          <img src={logo} alt="Logo" />
         </div>
-        <div className="products_h">
-          <h1>Products</h1>
-        </div>
-        <div className="addButton">
-          <Button variant="primary" size="lg" active className="add_inside" onClick={ToggleAddProduct}>
-            <img src={Plus} alt="Man" />
-            <span>Add Product</span>
-          </Button>
-        </div>
+        <Link to="/preview" className="preview">
+          <Button variant="primary" size="lg" active className="preview_inside">
+            <img src={Man} alt="Man" />
+            <span>Preview</span>
+          </Button>{" "}
+        </Link>
+      </div>
+      <div className="products_h">
+        <h1>Products</h1>
+      </div>
+      <div className="addButton">
+        <Button
+          variant="primary"
+          size="lg"
+          active
+          className="add_inside"
+          onClick={ToggleAddProduct}
+        >
+          <img src={Plus} alt="Man" />
+          <span>Add Product</span>
+        </Button>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default Header;
